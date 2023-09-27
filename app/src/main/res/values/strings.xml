@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MovieSpec</string>
+    <string name="all_movies_content_description">Movie Image</string>
+    <string name="home_screen_scroll_error">Not able to get more results. Please try later.</string>
+    <string name="all_ok">OK</string>
+    <string name="home_screen_error_message">There was an error. We are terribly sorry!</string>
+    <string name="home_screen_retry">Retry</string>
+    <string name="home_app_bar_title">Movie Spec</string>
 </resources>

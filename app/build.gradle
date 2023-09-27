@@ -30,7 +30,7 @@ android {
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
         if(file.exists()) {
             def localProperties = new Properties()
-            buildConfigField 'String', 'AUTH', "\"" + localProperties['auth'] + "\""
+            buildConfigField 'String', 'AUTH', "\"" + localProperties['auth.key'] + "\""
         } else {
             buildConfigField 'String', 'AUTH', "\"" + System.getenv("AUTH") + "\""
         }

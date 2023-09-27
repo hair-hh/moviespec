@@ -1,34 +1,41 @@
 package com.impulsed.moviespec.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import com.impulsed.moviespec.R
+import javax.annotation.concurrent.Immutable
 
 // Set of Material typography styles to start with
-val Typography = Typography(
-    body1 = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+val GeoMatrix = FontFamily(
+    Font(R.font.geomatrix, FontWeight.Normal),
+    Font(R.font.geomatrix_bold, FontWeight.Bold),
+    Font(R.font.geomatrix_medium, FontWeight.Medium)
 )
+
+@Immutable
+data class MovieSpecTypography(
+    val title1: TextStyle,
+    val title2: TextStyle,
+    val title3: TextStyle,
+    val subTitle1: TextStyle,
+    val subTitle2: TextStyle,
+    val body1: TextStyle,
+    val body2: TextStyle,
+    val button: TextStyle
+)
+
+val LocalMovieSpecTypography = staticCompositionLocalOf {
+    MovieSpecTypography(
+        title1 = TextStyle.Default,
+        title2 = TextStyle.Default,
+        title3 = TextStyle.Default,
+        subTitle1 = TextStyle.Default,
+        subTitle2 = TextStyle.Default,
+        body1 = TextStyle.Default,
+        body2 = TextStyle.Default,
+        button = TextStyle.Default
+    )
+}

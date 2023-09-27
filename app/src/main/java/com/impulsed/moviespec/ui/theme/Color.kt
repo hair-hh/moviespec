@@ -1,11 +1,34 @@
 package com.impulsed.moviespec.ui.theme
 
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import javax.annotation.concurrent.Immutable
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val PrimaryColor = Color(0xFFF50057)
+val PrimaryVariantColor = Color(0xFFFF80AB)
+val SecondaryColor = Color(0xFFFFC400)
+val SurfaceColor = Color(0xFFE0E0E0)
+val DisabledColor = Color(0xFF9E9E9E)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+@Immutable
+data class MovieSpecColors(
+    val primary: Color,
+    val primaryVariant: Color,
+    val secondary: Color,
+    val background: Color,
+    val onBackground: Color,
+    val surface: Color,
+    val onDisabled: Color
+)
+
+val LocalMovieSpecColors = staticCompositionLocalOf {
+    MovieSpecColors(
+        primary = Color.Red,
+        primaryVariant = Color.Magenta,
+        secondary = Color.Yellow,
+        background = Color.DarkGray,
+        onBackground = Color.Green,
+        surface = Color.Gray,
+        onDisabled = Color.LightGray
+    )
+}
