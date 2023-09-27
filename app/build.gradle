@@ -28,6 +28,7 @@ android {
         }
 
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
+        buildConfigField 'String', 'BASE_IMAGE_URL', "\"http://image.tmdb.org/t/p/\""
         if(file.exists()) {
             def localProperties = new Properties()
             buildConfigField 'String', 'AUTH', "\"" + localProperties['auth.key'] + "\""

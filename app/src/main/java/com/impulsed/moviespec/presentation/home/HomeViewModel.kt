@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getAllMovies() : Pager<Int, MovieResultEntity> {
-        return Pager(PagingConfig(50)) {
+        return Pager(PagingConfig(20)) {
             moviesSource
         }
     }

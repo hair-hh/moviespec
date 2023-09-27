@@ -16,7 +16,7 @@ interface RetrofitAPI {
         @Query("sort_by") sortBy: String = "popularity.desc"
     ) : GetAllMoviesResponse
 
-    @GET("/3/movie/{id}")
+    @GET("/3/movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int
     ): GetMovieDetailsResponse

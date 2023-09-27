@@ -1,3 +1,5 @@
+
+
 package com.impulsed.moviespec.presentation.home.ui
 
 import androidx.compose.foundation.Image
@@ -27,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,7 +37,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.rememberImagePainter
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.impulsed.moviespec.R
 import com.impulsed.moviespec.domain.entity.movies.MovieResultEntity
 import com.impulsed.moviespec.presentation.base.ScreenState
@@ -43,6 +47,7 @@ import com.impulsed.moviespec.presentation.common.HomeAppBar
 import com.impulsed.moviespec.presentation.common.LoadingItem
 import com.impulsed.moviespec.presentation.common.SnackbarView
 import com.impulsed.moviespec.presentation.home.HomeViewModel
+import com.impulsed.moviespec.presentation.utility.formatUrlForGlide
 import com.impulsed.moviespec.presentation.utility.setPortrait
 import com.impulsed.moviespec.ui.theme.MovieSpecTheme
 
@@ -143,6 +148,7 @@ private fun MovieListing(paddingValues: PaddingValues, openGameDetails: (Int) ->
         }
     }
 }
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
     Card(
@@ -162,16 +168,30 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
     ) {
         ConstraintLayout {
             val (image, title, rating) = createRefs()
-            Image(
-                contentScale = ContentScale.Crop,
-                painter = rememberImagePainter(
-                    data = movie.image,
-                    builder = {
-                        placeholder(R.drawable.camera_icon_estilizado_nofeet_nohandle)
-                        crossfade(true)
-                    }
+//            Image(
+//                contentScale = ContentScale.FillWidth,
+//                painter = rememberImagePainter(
+//                    data = movie.image,
+//                    builder = {
+//                        placeholder(R.drawable.camera_icon_estilizado_nofeet_nohandle)
+//                        crossfade(true)
+//                    }
+//                ),
+//                contentDescription = stringResource(id = R.string.all_movies_content_description),
+//                modifier = Modifier
+//                    .constrainAs(image) {
+//                        top.linkTo(parent.top)
+//                        start.linkTo(parent.start)
+//                        end.linkTo(parent.end)
+//                    }
+//                    .height(150.dp)
+//                    .fillMaxWidth()
+//            )
+            GlideImage(
+                model = movie.image.formatUrlForGlide(),
+                contentDescription = stringResource(
+                    id = R.string.all_movies_content_description
                 ),
-                contentDescription = stringResource(id = R.string.all_movies_content_description),
                 modifier = Modifier
                     .constrainAs(image) {
                         top.linkTo(parent.top)
@@ -179,11 +199,12 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
                         end.linkTo(parent.end)
                     }
                     .height(150.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Crop
             )
             Text(
                 text = movie.title,
-                style = MovieSpecTheme.typography.title3,
+                style = MovieSpecTheme.typography.subTitle1,
                 color = MovieSpecTheme.colors.primary,
                 maxLines = 2,
                 modifier = Modifier
@@ -205,7 +226,7 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
                     }) {
                 Text(
                     text = movie.rating.toString(),
-                    style = MovieSpecTheme.typography.subTitle1,
+                    style = MovieSpecTheme.typography.subTitle2,
                     color = MovieSpecTheme.colors.secondary,
                     modifier = Modifier
                         .padding(8.dp)
@@ -215,10 +236,23 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
                     painter = painterResource(id = R.drawable.star_ic),
                     contentDescription = stringResource(id = R.string.all_movies_content_description),
                     modifier = Modifier
-                        .padding(top = 10.dp)
+                        .padding(8.dp)
                 )
             }
 
         }
     }
+}
+
+@Composable
+@Preview
+private fun ShowMovieItem() {
+MovieItem(
+    movie = MovieResultEntity(
+        id = 123,
+        image = "http://image.tmdb.org/t/p/w300/kdPMUMJzyYAc4roD52qavX0nLIC.jpg",
+        title = "Hand",
+        rating = 5.0F
+    ), movieClick = {}
+)
 }
