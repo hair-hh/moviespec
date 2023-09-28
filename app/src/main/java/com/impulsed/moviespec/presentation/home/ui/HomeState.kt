@@ -6,7 +6,7 @@ import com.impulsed.moviespec.domain.entity.movies.MovieResultEntity
 import com.impulsed.moviespec.presentation.base.ScreenState
 import kotlinx.coroutines.flow.Flow
 
-data class HomState (
+data class HomeState (
     val screenState: ScreenState,
     val movies: Flow<PagingData<MovieResultEntity>>?,
     val error: ErrorRecord?

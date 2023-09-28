@@ -1,8 +1,7 @@
-
-
 package com.impulsed.moviespec.presentation.home.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -46,14 +46,16 @@ import com.impulsed.moviespec.presentation.common.GetMoviesError
 import com.impulsed.moviespec.presentation.common.HomeAppBar
 import com.impulsed.moviespec.presentation.common.LoadingItem
 import com.impulsed.moviespec.presentation.common.SnackbarView
+import com.impulsed.moviespec.presentation.home.HomeIntent
 import com.impulsed.moviespec.presentation.home.HomeViewModel
 import com.impulsed.moviespec.presentation.utility.formatUrlForGlide
 import com.impulsed.moviespec.presentation.utility.setPortrait
+import com.impulsed.moviespec.presentation.utility.trimDateToYear
 import com.impulsed.moviespec.ui.theme.MovieSpecTheme
 
 @Composable
 fun HomeScreen(
-    openGameDetails: (Int) -> Unit,
+    openMovieDetails: (Int) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
 
@@ -90,14 +92,19 @@ fun HomeScreen(
         content = { paddingValues ->
             MovieListing(
                 paddingValues = paddingValues,
-                openGameDetails = openGameDetails,
+                openMovieDetails = openMovieDetails,
                 homeViewModel = homeViewModel
             )
         }
     )
 }
+
 @Composable
-private fun MovieListing(paddingValues: PaddingValues, openGameDetails: (Int) -> Unit, homeViewModel: HomeViewModel) {
+private fun MovieListing(
+    paddingValues: PaddingValues,
+    openMovieDetails: (Int) -> Unit,
+    homeViewModel: HomeViewModel
+) {
 
     val errorMessage: String = stringResource(id = R.string.home_screen_scroll_error)
     val action: String = stringResource(id = R.string.all_ok)
@@ -112,42 +119,56 @@ private fun MovieListing(paddingValues: PaddingValues, openGameDetails: (Int) ->
         is ScreenState.Loading -> {
             //do nothing
         }
+
         is ScreenState.Error -> {
             GetMoviesError { homeViewModel.initData() }
         }
+
         is ScreenState.Success -> {
             val lazyGameItems = state.movies?.collectAsLazyPagingItems()
             lazyGameItems?.let { moviesItems ->
-                LazyVerticalGrid(modifier = Modifier.padding(paddingValues), columns = GridCells.Fixed(count = 2), content = {
-                    items(moviesItems.itemCount) { index ->
-                        moviesItems[index]?.let {
-                            MovieItem(movie = it, movieClick = openGameDetails)
+                LazyVerticalGrid(
+                    modifier = Modifier.padding(paddingValues),
+                    columns = GridCells.Fixed(count = 2),
+                    content = {
+                        items(moviesItems.itemCount) { index ->
+                            moviesItems[index]?.let {
+                                MovieItem(movie = it, movieClick = openMovieDetails)
+                            }
                         }
-                    }
 
-                    moviesItems.apply {
-                        when {
-                            loadState.refresh is LoadState.Loading -> {
-                                item { LoadingItem() }
-                                item { LoadingItem() }
-                            }
-                            loadState.append is LoadState.Loading -> {
-                                item { LoadingItem() }
-                                item { LoadingItem() }
-                            }
-                            loadState.refresh is LoadState.Error -> {
-                                homeViewModel.handlePaginationDataError()
-                            }
-                            loadState.append is LoadState.Error -> {
-                                homeViewModel.handlePaginationAppendError(errorMessage, action)
+                        moviesItems.apply {
+                            when {
+                                loadState.refresh is LoadState.Loading -> {
+                                    item { LoadingItem() }
+                                    item { LoadingItem() }
+                                }
+
+                                loadState.append is LoadState.Loading -> {
+                                    item { LoadingItem() }
+                                    item { LoadingItem() }
+                                }
+
+                                loadState.refresh is LoadState.Error -> {
+                                    homeViewModel.intent(HomeIntent.HandlePaginationDataError)
+                                }
+
+                                loadState.append is LoadState.Error -> {
+                                    homeViewModel.intent(
+                                        HomeIntent.HandlePaginationAppendError(
+                                            message = errorMessage,
+                                            action = action
+                                        )
+                                    )
+                                }
                             }
                         }
-                    }
-                })
+                    })
             }
         }
     }
 }
+
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
@@ -157,7 +178,7 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
         modifier = Modifier
             .padding(16.dp)
             .clip(RoundedCornerShape(10.dp))
-            .height(250.dp)
+            .height(290.dp)
             .fillMaxWidth()
             .clickable(
                 enabled = true,
@@ -166,27 +187,8 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
                 }
             )
     ) {
-        ConstraintLayout {
+        ConstraintLayout(modifier = Modifier.background(MovieSpecTheme.colors.background)) {
             val (image, title, rating) = createRefs()
-//            Image(
-//                contentScale = ContentScale.FillWidth,
-//                painter = rememberImagePainter(
-//                    data = movie.image,
-//                    builder = {
-//                        placeholder(R.drawable.camera_icon_estilizado_nofeet_nohandle)
-//                        crossfade(true)
-//                    }
-//                ),
-//                contentDescription = stringResource(id = R.string.all_movies_content_description),
-//                modifier = Modifier
-//                    .constrainAs(image) {
-//                        top.linkTo(parent.top)
-//                        start.linkTo(parent.start)
-//                        end.linkTo(parent.end)
-//                    }
-//                    .height(150.dp)
-//                    .fillMaxWidth()
-//            )
             GlideImage(
                 model = movie.image.formatUrlForGlide(),
                 contentDescription = stringResource(
@@ -198,9 +200,9 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                    .height(150.dp)
+                    .height(200.dp)
                     .fillMaxWidth(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillWidth
             )
             Text(
                 text = movie.title,
@@ -230,13 +232,21 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
                     color = MovieSpecTheme.colors.secondary,
                     modifier = Modifier
                         .padding(8.dp)
+                        .align(Alignment.CenterVertically)
                 )
                 Image(
                     contentScale = ContentScale.Crop,
                     painter = painterResource(id = R.drawable.star_ic),
                     contentDescription = stringResource(id = R.string.all_movies_content_description),
+                    modifier = Modifier.padding(8.dp)
+                )
+                Text(
+                    text = movie.releaseDate.trimDateToYear(),
+                    style = MovieSpecTheme.typography.subTitle2,
+                    color = MovieSpecTheme.colors.secondary,
                     modifier = Modifier
                         .padding(8.dp)
+                        .align(Alignment.CenterVertically)
                 )
             }
 
@@ -247,12 +257,13 @@ private fun MovieItem(movie: MovieResultEntity, movieClick: (Int) -> Unit) {
 @Composable
 @Preview
 private fun ShowMovieItem() {
-MovieItem(
-    movie = MovieResultEntity(
-        id = 123,
-        image = "http://image.tmdb.org/t/p/w300/kdPMUMJzyYAc4roD52qavX0nLIC.jpg",
-        title = "Hand",
-        rating = 5.0F
-    ), movieClick = {}
-)
+    MovieItem(
+        movie = MovieResultEntity(
+            id = 123,
+            image = "http://image.tmdb.org/t/p/w300/kdPMUMJzyYAc4roD52qavX0nLIC.jpg",
+            title = "Hand",
+            rating = 5.0F,
+            releaseDate = "2023-08-23"
+        ), movieClick = {}
+    )
 }

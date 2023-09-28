@@ -1,4 +1,4 @@
-package com.impulsed.moviespec.domain.interactor
+package com.impulsed.moviespec.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

@@ -91,4 +91,6 @@ dependencies {
 
     def turbine_version = "0.7.0"
     testImplementation "app.cash.turbine:turbine:$turbine_version"
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }

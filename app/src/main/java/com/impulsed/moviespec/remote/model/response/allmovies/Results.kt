@@ -34,6 +34,6 @@ data class Results(
     val voteCount: Int
 )
 
-fun Results.toEntity() = MovieResultEntity(id, title, posterPath, voteAverage)
+fun Results.toEntity() = MovieResultEntity(id, title, posterPath, voteAverage, releaseDate)
 
 fun List<Results>.toEntity() = map { it.toEntity() }

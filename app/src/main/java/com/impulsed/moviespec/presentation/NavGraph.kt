@@ -12,11 +12,15 @@ object Destinations {
     object MovieDetailsArgs {
         const val movieId = "movieId"
     }
+
+    object HomeAgs {
+        const val moviesPage = "moviesPage"
+    }
 }
 class Actions(navHostController: NavHostController) {
 
     val openMovieDetails: (Int) -> Unit = {movieId ->
-        navHostController.popBackStack(route = HOME, inclusive = false)
+        navHostController.popBackStack(route = HOME, inclusive = false, saveState = true)
         navHostController.navigate("$MOVIE_DETAILS/$movieId")
     }
 

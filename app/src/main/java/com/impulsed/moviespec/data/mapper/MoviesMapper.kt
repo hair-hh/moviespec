@@ -8,12 +8,11 @@ import com.impulsed.moviespec.remote.model.response.allmovies.toEntity
 import com.impulsed.moviespec.remote.model.response.moviedetails.GetMovieDetailsResponse
 import com.impulsed.moviespec.remote.model.response.moviedetails.toEntity
 
-class MoviesMapper {
-    fun mapMoviesResponse(allMoviesResponse: GetAllMoviesResponse): Record<MoviesEntity> {
-        return Record(MoviesEntity(allMoviesResponse.results.toEntity()), null)
-    }
 
-    fun mapMovieDetailsResponse(movieDetailsResponse: GetMovieDetailsResponse): Record<MovieDetailsEntity> {
-        return Record(movieDetailsResponse.toEntity(), null)
-    }
+fun GetAllMoviesResponse.mapMoviesResponse(): Record<MoviesEntity> {
+    return Record(MoviesEntity(this.results.toEntity()), null)
+}
+
+fun GetMovieDetailsResponse.mapMovieDetailsResponse(): Record<MovieDetailsEntity> {
+    return Record(this.toEntity(), null)
 }

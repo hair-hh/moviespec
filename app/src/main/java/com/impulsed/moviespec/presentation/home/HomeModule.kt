@@ -1,6 +1,6 @@
 package com.impulsed.moviespec.presentation.home
 
-import com.impulsed.moviespec.domain.interactor.MoviesSource
+import com.impulsed.moviespec.data.MoviesSource
 import com.impulsed.moviespec.domain.repository.MovieRepository
 import dagger.Module
 import dagger.Provides

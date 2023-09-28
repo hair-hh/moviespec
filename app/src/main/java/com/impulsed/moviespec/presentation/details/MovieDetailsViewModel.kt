@@ -2,7 +2,7 @@ package com.impulsed.moviespec.presentation.details
 
 import androidx.lifecycle.SavedStateHandle
 import com.impulsed.moviespec.presentation.Destinations.MovieDetailsArgs.movieId
-import com.impulsed.moviespec.domain.interactor.MovieDetailsUseCase
+import com.impulsed.moviespec.domain.usecase.GetMovieDetailsUseCase
 import com.impulsed.moviespec.presentation.base.BaseViewModel
 import com.impulsed.moviespec.presentation.base.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getMovieDetailsUseCase: MovieDetailsUseCase
+    private val getMovieDetailsUseCase: GetMovieDetailsUseCase
 ) : BaseViewModel<MovieDetailsState, MovieDetailsSideEffect>(savedStateHandle) {
     override fun createInitialState(): MovieDetailsState =
         MovieDetailsState(ScreenState.Loading, null, null)
@@ -31,7 +31,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     private fun getMovieDetails(movieId: Int) = intent {
         getMovieDetailsUseCase.invoke(
-            MovieDetailsUseCase.RequestValue(movieId = movieId)
+            GetMovieDetailsUseCase.RequestValue(movieId = movieId)
         ).collect { record ->
             if (record.data != null) {
                 reduce {

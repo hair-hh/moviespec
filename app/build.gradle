@@ -10,7 +10,7 @@ plugins {
 apply from: './gradleScript/dependencies.gradle'
 
 android {
-    def file = rootProject.file("local.properties")
+    def file = rootProject.file("keystore.properties")
 
     namespace 'com.impulsed.moviespec'
     compileSdk 34
@@ -30,10 +30,11 @@ android {
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
         buildConfigField 'String', 'BASE_IMAGE_URL', "\"http://image.tmdb.org/t/p/\""
         if(file.exists()) {
-            def localProperties = new Properties()
-            buildConfigField 'String', 'AUTH', "\"" + localProperties['auth.key'] + "\""
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(file))
+            buildConfigField 'String', 'AUTH', keystoreProperties['storeAuth']
         } else {
-            buildConfigField 'String', 'AUTH', "\"" + System.getenv("AUTH") + "\""
+            buildConfigField 'String', 'AUTH', " " + System.getenv("AUTH")
         }
     }
 
@@ -44,6 +45,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }

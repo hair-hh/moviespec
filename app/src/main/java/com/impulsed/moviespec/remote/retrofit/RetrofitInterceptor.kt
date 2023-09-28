@@ -1,5 +1,6 @@
 package com.impulsed.moviespec.remote.retrofit
 
+import com.impulsed.moviespec.BuildConfig
 import com.impulsed.moviespec.remote.ApiConstants
 import com.impulsed.moviespec.remote.RemoteException
 import okhttp3.Interceptor
@@ -12,7 +13,7 @@ class RetrofitInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         try {
             val requestBuilder = chain.request().newBuilder()
-                .addHeader(ApiConstants.AUTH, "Bearer " + ApiConstants.AUTH_KEY)
+                .addHeader(ApiConstants.AUTH, "Bearer " + BuildConfig.AUTH)
                 .url(chain.request().url)
             val response = chain.proceed(requestBuilder.build())
             if (response.code in HttpURLConnection.HTTP_BAD_REQUEST..ApiConstants.STATUS_CODE_499) {

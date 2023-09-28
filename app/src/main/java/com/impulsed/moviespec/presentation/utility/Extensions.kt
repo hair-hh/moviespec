@@ -7,6 +7,9 @@ import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 
 import com.impulsed.moviespec.BuildConfig
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Locale
 
 fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
@@ -26,4 +29,10 @@ fun String.formatUrlForGlide() : String {
 
 fun String.formatUrlForPosterGlide() : String {
     return BuildConfig.BASE_IMAGE_URL + "original" + this
+}
+
+fun String.trimDateToYear() : String {
+    val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    val date = LocalDate.parse(this)
+    return date.year.toString()
 }

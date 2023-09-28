@@ -1,6 +1,7 @@
 package com.impulsed.moviespec.remote
 
-import okio.IOException
+import java.io.IOException
+
 
 sealed class RemoteException(message: String): IOException(message) {
     class ClientError(message: String): RemoteException(message)

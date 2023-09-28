@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -125,7 +126,7 @@ fun MovieDetails(
         modifier = modifier
             .fillMaxWidth()
             .verticalScroll(scrollState)
-            .background(MovieSpecTheme.colors.onDisabled)
+            .background(MovieSpecTheme.colors.surface)
     ) {
         ConstraintLayout {
             val (movieImage) = createRefs()
@@ -381,4 +382,31 @@ private fun ExpandableDescription(modifier: Modifier = Modifier, description: St
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ShowDetails() {
+    MovieDetails(
+        modifier = Modifier.systemBarsPadding(),
+        movieDetails = MovieDetailsEntity(
+            id = 11,
+            homepage = "www.oldmovie.com",
+            budget = 20000000,
+            imdbId ="tt5568",
+            originalLanguage = "English",
+            originalTitle = "Bumblebee",
+            overView = "Lorem ipsum.......................",
+            posterPath = "",
+            releaseDate = "2023-01-01",
+            runtime = 120,
+            status = "released",
+            voteAverage = 7.2F,
+            voteCount = 1500,
+            title = "Bumblebee",
+            genres = emptyList(),
+            productionCompanies = emptyList(),
+            productionCountries = emptyList(),
+            spokenLanguages = emptyList()
+        ))
 }

@@ -9,7 +9,7 @@ data class MovieDetailsEntity(
     val id: Int,
     val budget: Int,
     val homepage: String,
-    val imdbId: String,
+    val imdbId: String?,
     val originalLanguage: String,
     val originalTitle: String,
     val overView: String,

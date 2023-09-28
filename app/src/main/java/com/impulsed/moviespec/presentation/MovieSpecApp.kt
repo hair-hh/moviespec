@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.impulsed.moviespec.presentation.Destinations.HOME
+import com.impulsed.moviespec.presentation.Destinations.HomeAgs.moviesPage
 import com.impulsed.moviespec.presentation.Destinations.MOVIE_DETAILS
 import com.impulsed.moviespec.presentation.Destinations.MovieDetailsArgs.movieId
 import com.impulsed.moviespec.presentation.details.MovieDetailsScreen
@@ -22,8 +23,10 @@ fun MovieSpecApp() {
         Actions(navController)
     }
     NavHost(navController = navController, startDestination = HOME) {
-        composable(HOME) {
-            HomeScreen(openGameDetails = actions.openMovieDetails)
+        composable(HOME, arguments = listOf(
+            navArgument(moviesPage) { type = NavType.IntType }
+        )) {
+            HomeScreen(openMovieDetails = actions.openMovieDetails)
         }
 
         composable(
